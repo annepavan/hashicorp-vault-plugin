@@ -23,6 +23,10 @@
  */
 package com.datapipe.jenkins.vault.model;
 
+import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
+import com.cloudbees.plugins.credentials.domains.DomainRequirement;
+import com.cloudbees.plugins.credentials.domains.URIRequirementBuilder;
+import com.datapipe.jenkins.vault.credentials.VaultCredential;
 import hudson.Extension;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
@@ -46,6 +50,8 @@ public class VaultSecret extends AbstractDescribableImpl<VaultSecret> {
     private String path;
     private Integer engineVersion;
     private List<VaultSecretValue> secretValues;
+    private String vaultCredentialId;
+    private String vaultNamespace;
 
     @DataBoundConstructor
     public VaultSecret(String path, List<VaultSecretValue> secretValues) {
@@ -70,6 +76,24 @@ public class VaultSecret extends AbstractDescribableImpl<VaultSecret> {
         return this.secretValues;
     }
 
+    @DataBoundSetter
+    public void setVaultCredentialId(String vaultCredentialId) {
+        this.vaultCredentialId = fixEmptyAndTrim(vaultCredentialId);
+    }
+
+    public String getVaultCredentialId() {
+        return vaultCredentialId;
+    }
+
+    @DataBoundSetter
+    public void setVaultNamespace(String vaultNamespace) {
+        this.vaultNamespace = fixEmptyAndTrim(vaultNamespace);
+    }
+
+    public String getVaultNamespace() {
+        return vaultNamespace;
+    }
+
     @Extension
     public static final class DescriptorImpl extends Descriptor<VaultSecret> {
 
@@ -81,6 +105,14 @@ public class VaultSecret extends AbstractDescribableImpl<VaultSecret> {
         @SuppressWarnings("unused") // used by stapler
         public ListBoxModel doFillEngineVersionItems(@AncestorInPath Item context) {
             return engineVersions(context);
+        }
+
+        @SuppressWarnings("unused") // used by stapler
+        public ListBoxModel doFillVaultCredentialIdItems(@AncestorInPath Item item,
+            @org.kohsuke.stapler.QueryParameter String uri) {
+            List<DomainRequirement> domainRequirements = URIRequirementBuilder.fromUri(uri).build();
+            return new StandardListBoxModel().includeEmptyValue().includeAs(hudson.security.ACL.SYSTEM, item,
+                VaultCredential.class, domainRequirements);
         }
 
     }
