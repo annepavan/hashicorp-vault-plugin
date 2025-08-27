@@ -36,6 +36,7 @@ import java.util.List;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.verb.POST;
 
 import static com.datapipe.jenkins.vault.configuration.VaultConfiguration.engineVersions;
 import static hudson.Util.fixEmptyAndTrim;
@@ -108,6 +109,7 @@ public class VaultSecret extends AbstractDescribableImpl<VaultSecret> {
         }
 
         @SuppressWarnings("unused") // used by stapler
+        @POST
         public ListBoxModel doFillVaultCredentialIdItems(@AncestorInPath Item item,
             @org.kohsuke.stapler.QueryParameter String uri) {
             List<DomainRequirement> domainRequirements = URIRequirementBuilder.fromUri(uri).build();

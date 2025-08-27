@@ -6,14 +6,13 @@ import com.datapipe.jenkins.vault.model.VaultSecret;
 import hudson.EnvVars;
 import hudson.model.Job;
 import hudson.model.Run;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Collections;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mockito;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.Collections;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
